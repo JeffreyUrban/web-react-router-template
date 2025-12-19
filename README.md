@@ -40,7 +40,35 @@ A production-ready template for building modern web applications with React Rout
    npm run dev
    ```
 
-4. **Optional: Set up Renovate** (see [Automated Dependency Updates](#automated-dependency-updates) below)
+4. **Configure repository settings** (see [Repository Configuration](#repository-configuration) below)
+   - Set up branch protection rules
+   - Configure Renovate for automated dependency updates
+
+## Repository Configuration
+
+### Branch Protection Rules
+
+To ensure code quality and require reviews before merging to main:
+
+1. **Navigate to branch protection settings**
+   - Go to your repository on GitHub
+   - Settings → Branches → Classic Branch Protection
+   - Click "Add classic branch protection rule"
+
+2. **Configure the protection rule**
+   - **Branch name pattern:** `main`
+   - **Enable these settings:**
+     - ✅ Require a pull request before merging
+     - ✅ Require status checks to pass before merging
+     - ✅ Do not allow bypassing the above settings
+
+   - **Status checks that are required:**
+     - `review_app` (PR preview deployment must succeed)
+     - `Code Quality Checks` (linting and type checking must pass)
+
+3. **Save changes**
+
+This ensures that all code merged to main has been reviewed and passes all automated checks.
 
 ## Getting Started
 
@@ -168,12 +196,12 @@ Edit `tailwind.config.js` to customize colors, fonts, and design tokens.
 
 Images are automatically optimized using vite-imagetools:
 
-```tsx
+```typescript
 // Import with transformation queries
 import image from '~/assets/images/photo.jpg?w=800;1200&format=webp'
 
-// Use in components
-<img src={image[0].src} srcSet={image.map(i => `${i.src} ${i.w}w`).join(', ')} />
+// The imported image is an array of optimized versions
+// Use in your component with src and srcSet attributes
 ```
 
 Images are automatically resized, converted to WebP, and optimized.
@@ -448,21 +476,36 @@ The template includes GitHub Actions workflows for PR preview deployments. To en
    - Change line 36 from `mysitename-site` to match your app name from `fly.toml`
    - Example: If your app is `my-app`, use `pr-${{ github.event.number }}-my-app`
 
-2. **Create an org-level token** (required for creating/destroying apps)
+2. **Generate a fresh org-level token** (required for creating/destroying apps)
    ```bash
    fly tokens org <YOUR_ORG_NAME>
    ```
 
-   This creates a token with permissions to create and destroy apps within your organization.
+   This generates and displays a token with permissions to create and destroy apps within your organization.
 
-3. **Update GitHub Secret**
-   - Replace your existing `FLY_API_TOKEN` secret with the new org-level token, or
-   - Add it as a separate secret if you prefer to keep both
+   **Important:**
+   - Copy the token immediately when it's displayed
+   - The token is only shown once
+   - If you already have a token but it's not working, generate a fresh one
+
+3. **Add token to GitHub Secrets**
+   - Go to your GitHub repository → Settings → Secrets and variables → Actions
+   - If `FLY_API_TOKEN` exists, click to edit it and paste the new token
+   - If it doesn't exist, click "New repository secret" with name `FLY_API_TOKEN`
+   - Paste the token and save
 
 **How it works:**
 - Each PR creates a new app named `pr-{number}-{your-app-name}`
 - Apps are accessible at `https://pr-{number}-{your-app-name}.fly.dev`
 - Apps are automatically destroyed when PRs are closed or merged
+
+**Troubleshooting:**
+
+If PR deployments fail with "Not authorized to deploy this app":
+1. Verify the workflow file has the correct app name (not `mysitename-site`)
+2. Regenerate a fresh org token: `fly tokens org <YOUR_ORG_NAME>`
+3. Update the `FLY_API_TOKEN` secret in GitHub with the new token
+4. Ensure you're using an org token, not a deploy token
 
 **Note**:
 - Regular deploy tokens (`fly tokens create deploy`) don't have permission to create new apps
