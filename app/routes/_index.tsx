@@ -104,16 +104,19 @@ export default function Home() {
                             What&apos;s Included
                         </h2>
                         <ul className="mt-4 list-disc list-inside text-base text-zinc-600 dark:text-zinc-400 space-y-2">
-                            <li>React Router 7 with file-based routing</li>
-                            <li>Tailwind CSS 4 for styling</li>
-                            <li>Dark mode support with theme toggle</li>
-                            <li>TypeScript for type safety</li>
-                            <li>Responsive layout with header and footer</li>
+                            <li>React Router 7 with file-based routing and automatic route discovery</li>
+                            <li>Tailwind CSS 4 with custom typography</li>
+                            <li>TypeScript for full type safety</li>
+                            <li>Dark mode with built-in theme support</li>
                             <li>Image optimization with vite-imagetools</li>
                             <li>MDX support for content</li>
-                            <li>Testing setup with Vitest</li>
-                            <li>ESLint and Prettier for code quality</li>
-                            <li>Husky pre-commit hooks</li>
+                            <li>Testing setup with Vitest and React Testing Library</li>
+                            <li>ESLint, Prettier, and pre-commit hooks</li>
+                            <li>Responsive design that works on all devices</li>
+                            <li>Deployment ready with Dockerfile and Fly.io configuration</li>
+                            <li>Automated dependency updates with Renovate</li>
+                            <li>MIT licensed - free to use for any project</li>
+                            <li>Comprehensive customization instructions</li>
                         </ul>
                     </div>
 
