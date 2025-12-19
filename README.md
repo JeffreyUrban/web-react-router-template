@@ -437,6 +437,38 @@ The template includes GitHub Actions for automatic deployment. To configure:
 
 **Security Note**: Never commit the `FLY_API_TOKEN` directly to your repository. Always use GitHub Secrets.
 
+#### PR Preview Apps
+
+The template includes GitHub Actions workflows for PR preview deployments. To enable them:
+
+**Setup steps:**
+
+1. **Update the workflow app name**
+   - Edit `.github/workflows/fly-review.yml`
+   - Change line 36 from `mysitename-site` to match your app name from `fly.toml`
+   - Example: If your app is `my-app`, use `pr-${{ github.event.number }}-my-app`
+
+2. **Create an org-level token** (required for creating/destroying apps)
+   ```bash
+   fly tokens org <YOUR_ORG_NAME>
+   ```
+
+   This creates a token with permissions to create and destroy apps within your organization.
+
+3. **Update GitHub Secret**
+   - Replace your existing `FLY_API_TOKEN` secret with the new org-level token, or
+   - Add it as a separate secret if you prefer to keep both
+
+**How it works:**
+- Each PR creates a new app named `pr-{number}-{your-app-name}`
+- Apps are accessible at `https://pr-{number}-{your-app-name}.fly.dev`
+- Apps are automatically destroyed when PRs are closed or merged
+
+**Note**:
+- Regular deploy tokens (`fly tokens create deploy`) don't have permission to create new apps
+- PR preview apps count toward your Fly.io resource limits
+- Monitor usage at https://fly.io/dashboard
+
 ### Other Platforms
 
 Build the production bundle:
