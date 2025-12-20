@@ -1,0 +1,30 @@
+# Template Customization Configuration
+#
+# This file defines what gets customized when this template is integrated into a monorepo.
+# The template remains fully functional and deployable on its own - these are just markers
+# for what should be replaced during integration.
+#
+# Available replacement variables:
+#   - project_slug: lowercase-with-hyphens (e.g., "my-awesome-app")
+#   - project_name: user-friendly name (e.g., "My Awesome App")
+
+customizations:
+  # Fly.io app name
+  - file: fly.toml
+    find: 'web-react-router-template'
+    replace_with: 'project_slug'
+
+  # Fly.io review app names in workflow
+  - file: .github/workflows/fly-review.yml
+    find: 'pr-${{ github.event.number }}-web-react-router-template'
+    replace_with: 'pr-${{ github.event.number }}-{project_slug}'
+
+  # Package name (uses JSON path for structured replacement)
+  - file: package.json
+    json_path: 'name'
+    replace_with: 'project_slug'
+
+  # README title
+  - file: README.md
+    find: '# React Router Template with Tailwind CSS'
+    replace_with: '# {project_name}'
