@@ -1,17 +1,17 @@
 /**
  * Centralized image registry with type-safe imports
- * All vite-imagetools imports are handled here to avoid TypeScript issues
+ *
+ * Note: SVGs are imported as-is since they're already vector graphics.
+ * For raster images (PNG, JPG), you can use vite-imagetools query parameters.
+ * Example: import photo from '~/assets/images/photo.jpg?w=400;800;1200&format=webp'
  *
  * Add your own images here and import them in your components
  */
 
-import type { ImageOutput } from './imagetools';
+// Placeholder image - SVGs are imported directly (no vite-imagetools needed)
+import placeholder from '~/assets/images/placeholder.svg';
 
-// Placeholder image demonstrating vite-imagetools
-// @ts-expect-error - Vite imagetools query parameters not recognized by TypeScript module resolution
-import placeholderImg from '~/assets/images/placeholder.svg?w=400;800;1200&format=webp&as=picture';
-
-// Export organized by category with proper types
+// Export organized by category
 export const examples = {
-  placeholder: placeholderImg as ImageOutput[],
+  placeholder,
 };
